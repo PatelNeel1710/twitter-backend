@@ -8,7 +8,6 @@ export interface AuthenticatedRequest extends Request {
 }
 
 const authMiddleware = errorHandlerAsync(async (req: any, res: any, next: any) => {
-    console.log('inside protect');
     let token;
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         token = req.headers.authorization.split(' ')[1];
@@ -19,11 +18,9 @@ const authMiddleware = errorHandlerAsync(async (req: any, res: any, next: any) =
     }
 
     const decode = jwt.decode(token) as any;
-    console.log('decode:', decode);
     const user = await User.findById(decode.id);
 
     if (!user) return next(new AppError('user has been deleted', 400));
-    console.log('userId:', user._id);
 
     req.user = user;
     req.user.userId = user._id;

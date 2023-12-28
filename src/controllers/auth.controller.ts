@@ -12,7 +12,6 @@ const signToken = (id: any) =>
 
 const createSendToken = (user: any, statusCode: any, req: any, res: any) => {
     console.log('sending token');
-    console.log(`${JWT_EXPIRES_IN}`);
     const token = signToken(user._id);
     res.status(statusCode).json({
         token,
@@ -55,7 +54,6 @@ const createSendToken = (user: any, statusCode: any, req: any, res: any) => {
  *
  */
 export const login = errorHandlerAsync(async (req: { body: { email: any; password?: any; }; }, res: any, next: (arg0: AppError) => void) => {
-    console.log('body:', req.body);
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -66,10 +64,8 @@ export const login = errorHandlerAsync(async (req: { body: { email: any; passwor
         return next(new AppError('Could not find the user with given email', 404));
     }
     const pass = await hash(password, HASH_NUMBER);
-    console.log('pass:', pass);
     const isCorrect = user.password && await compare(password, user.password);
 
-    console.log('isCorrect:', isCorrect);
     if (isCorrect) {
         createSendToken(user, 200, req, res);
     } else {
@@ -113,7 +109,6 @@ export const login = errorHandlerAsync(async (req: { body: { email: any; passwor
  */
 
 export const signUp = errorHandlerAsync(async (req: { body: { email: any; password?: any; }; }, res: any, next: (arg0: AppError) => any) => {
-    console.log('body:', req.body);
     const { email, password } = req.body;
 
     if (!email || !password) {
