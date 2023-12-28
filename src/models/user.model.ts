@@ -19,11 +19,11 @@ const userSchema = new Schema(
             require: [true, 'Please pass password']
         },
         followers: {
-            type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+            type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
             default: [],
         },
         following: {
-            type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+            type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
             default: [],
         },
     },

@@ -3,6 +3,10 @@ import User from '../models/user.model';
 import errorHandlerAsync from '../utils/error-handler';
 import AppError from '../utils/app-error';
 
+export interface AuthenticatedRequest extends Request {
+    user?: { userId: string };
+}
+
 const authMiddleware = errorHandlerAsync(async (req: any, res: any, next: any) => {
     console.log('inside protect');
     let token;
@@ -22,7 +26,7 @@ const authMiddleware = errorHandlerAsync(async (req: any, res: any, next: any) =
     console.log('userId:', user._id);
 
     req.user = user;
-    res.locals.user = user;
+    req.user.userId = user._id;
     next();
 });
 

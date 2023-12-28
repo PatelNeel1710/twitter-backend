@@ -76,3 +76,54 @@ export const login = errorHandlerAsync(async (req: { body: { email: any; passwor
         next(new AppError('Please enter correct password', 400));
     }
 });
+
+/**
+ * @swagger
+ * /api/signup:
+ *   post:
+ *     summery: signup api
+ *     tags: [user]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: user1@gmail.com
+ *               password:
+ *                 type: string
+ *                 example: user@123
+ *               name:
+ *                 type: string
+ *                 example: user1
+ *     responses:
+ *       200:
+ *         description: successful signup
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *
+ */
+
+export const signUp = errorHandlerAsync(async (req: { body: { email: any; password?: any; }; }, res: any, next: (arg0: AppError) => any) => {
+    console.log('body:', req.body);
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return next(new AppError('please provide email and password', 400));
+    }
+    const user = await User.findOne({ email: req.body.email });
+    if (user) {
+        return next(new AppError('Email is already exists', 400));
+    }
+    const newUser = await User.create({ email, password });
+
+    createSendToken(newUser, 200, req, res);
+});

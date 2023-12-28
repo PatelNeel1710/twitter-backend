@@ -6,6 +6,8 @@ import m2s from 'mongoose-to-swagger';
 import User from './models/user.model';
 import userRouter from './routes/user.routes';
 import authRouter from './routes/auth.routes';
+import messageRouter from './routes/message.routes';
+import followRouter from './routes/follow.routes';
 
 const app = express();
 
@@ -50,5 +52,7 @@ app.get('/', (req, res) => {
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
 app.use('/api', userRouter);
 app.use('/api', authRouter);
+app.use('/api/message', messageRouter);
+app.use('/api/follow', followRouter);
 
 export default app;
